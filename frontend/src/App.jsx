@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import HomePage from "./HomePage";
-import AuthPage from "./AuthPage";
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // ავტომატური შესვლა თუ უკვე არის შენახული მომხმარებელი
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setUser(JSON.parse(savedUser));
@@ -17,6 +15,7 @@ export default function App() {
 
   const handleLogin = (userData) => {
     setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   const handleLogout = () => {
@@ -35,9 +34,5 @@ export default function App() {
     );
   }
 
-  if (!user) {
-    return <AuthPage onLogin={handleLogin} />;
-  }
-
-  return <HomePage user={user} onLogout={handleLogout} />;
+  return <HomePage user={user} onLogin={handleLogin} onLogout={handleLogout} />;
 }
